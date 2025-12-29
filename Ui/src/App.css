@@ -1,18 +1,30 @@
 /* Global Styles */
 @import url('https://fonts.googleapis.com/css?family=Montserrat:100,500,700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Roboto:400&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-/* Drawer Animation - Optimized for Performance */
+
+/* Drawer Animation - Smooth Spring Effect */
 @keyframes slideInSmooth {
   0% {
     transform: translate3d(-100%, 0, 0);
     opacity: 0;
   }
+
+  60% {
+    transform: translate3d(10px, 0, 0);
+    opacity: 1;
+  }
+
+  80% {
+    transform: translate3d(-5px, 0, 0);
+  }
+
   100% {
     transform: translate3d(0, 0, 0);
     opacity: 1;
@@ -20,7 +32,7 @@
 }
 
 .MuiDrawer-paper.animate-slide-in {
-  animation: slideInSmooth 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideInSmooth 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   will-change: transform, opacity;
 }
 
@@ -31,21 +43,22 @@
   background-color: #ffffff;
 }
 
-/* Fixed Header */
+/* Fixed Header - Nokia Blue Gradient */
 .header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1200;
-  background: linear-gradient(135deg, #0D47A1 0%, #1565C0 50%, #1976D2 100%);
-  box-shadow: 0 8px 25px rgba(13, 71, 161, 0.4);
+  background: linear-gradient(135deg, #003366 0%, #004080 40%, #0066b3 100%);
+  box-shadow: 0 4px 20px rgba(0, 48, 102, 0.5);
   color: #ffffff !important;
-  padding: 15px 24px;
+  padding: 12px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 80px;
+  height: 70px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .header * {
@@ -63,7 +76,8 @@
 }
 
 .main-container.drawer-open {
-  margin-left: 280px; /* Same width as the drawer */
+  margin-left: 280px;
+  /* Same width as the drawer */
 }
 
 /* Main Content - Optimized Performance */
@@ -73,7 +87,8 @@
   flex-direction: column;
   gap: 6px;
   min-height: calc(100vh - 96px);
-  transform: translateZ(0); /* Force hardware acceleration */
+  transform: translateZ(0);
+  /* Force hardware acceleration */
 }
 
 /* Normal view styles (non-user-manual) */
@@ -81,39 +96,36 @@
   background: #f4f7fb;
   margin: 2px;
   border-radius: 12px;
-  padding: 12px;
+  padding: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .main-top-row {
   display: flex;
   flex-direction: row;
-  gap: 10px;
-  height: 100%;
+  gap: 24px;
   align-items: stretch;
-  margin-bottom: 0px;
-  flex: 1;
+  min-height: 400px;
 }
 
 .live_data {
-  width: 60%;
+  flex: 3;
   display: flex;
-  align-items: stretch;
-  height: 100%;
+  flex-direction: column;
 }
 
 .people {
-  width: 40%;
+  flex: 2;
   display: flex;
-  align-items: stretch;
-  height: 100%;
+  flex-direction: column;
 }
 
 /* Analytics View */
 .analytics-view {
   width: 100%;
-  height: 100%; /* Full height */
-  padding: 3px; 
+  height: 100%;
+  /* Full height */
+  padding: 3px;
   display: flex;
   flex-direction: column;
 }
@@ -121,7 +133,8 @@
 .analytics-charts {
   display: flex;
   flex-direction: row;
-  gap: 6px; /* gap between charts */
+  gap: 6px;
+  /* gap between charts */
   width: 100%;
   height: 100%;
   flex: 1;
@@ -129,7 +142,8 @@
 
 .chart-container {
   background: white;
-  padding: 14px; /* Reduced from 24px */
+  padding: 14px;
+  /* Reduced from 24px */
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   border: 1px solid #e2e8f0;
@@ -138,6 +152,13 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease;
+}
+
+.chart-container:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 64, 128, 0.12);
 }
 
 .chart-container h3 {
@@ -156,23 +177,26 @@
   .main-top-row {
     flex-direction: column;
   }
+
   .live_data,
   .people {
     width: 100%;
   }
+
   .analytics-charts {
     flex-direction: column;
     padding: 12px;
   }
+
   .chart-container {
     width: 100%;
     padding: 16px;
   }
-  
+
   .user-manual-container {
     padding: 0;
   }
-  
+
   .main.user-manual-view {
     margin: 0;
     padding: 0;
@@ -186,8 +210,10 @@
 }
 
 .MuiDrawer-paper {
-  transform: translateZ(0); /* Force hardware acceleration */
-  backface-visibility: hidden; /* Prevent flickering */
+  transform: translateZ(0);
+  /* Force hardware acceleration */
+  backface-visibility: hidden;
+  /* Prevent flickering */
 }
 
 .MuiBackdrop-root {

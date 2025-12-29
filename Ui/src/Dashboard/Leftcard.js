@@ -12,12 +12,13 @@ import { API } from "../services/api";
 
 function Leftcard() {
   const [monthlyWeight, setMonthlyWeight] = useState(0);
-  const [todayWeight, setTodayWeight] = useState(0);
   const [liveWeight, setLiveWeight] = useState(0);
   const [isConnected, setIsConnected] = useState(false); // WebSocket connection status
   const [error, setError] = useState(null);
-  const [recentEntries, setRecentEntries] = useState([]);
+  const [weightDelta, setWeightDelta] = useState(null);
+  const [showDelta, setShowDelta] = useState(false);
   const wsRef = useRef(null);
+  const prevWeightRef = useRef(0);
 
   window.odometerOptions = {
     animation: 'slide',
@@ -32,7 +33,7 @@ function Leftcard() {
         const data = res.data;
         if (isMounted) {
           if (data.success && data.data && typeof data.data.total_quantity_kg === 'number') {
-            setMonthlyWeight(data.data.total_quantity_kg * 1000); // Convert kg to grams for consistent formatting
+            setMonthlyWeight(data.data.total_quantity_kg * 1000); // convert kg to grams
             setError(null);
           } else {
             setError('Failed to load monthly waste data');
@@ -45,31 +46,8 @@ function Leftcard() {
       }
     };
 
-    const fetchTodayWaste = async () => {
-      try {
-        const res = await API.getDailyWaste();
-        const data = res.data;
-        if (isMounted) {
-          if (data.success && typeof data.todayWeight === 'number') {
-            setTodayWeight(data.todayWeight / 1000); // Convert grams to kg for display
-            setError(null);
-          } else {
-            setError('Failed to load today waste data');
-          }
-        }
-      } catch (err) {
-        if (isMounted) {
-          setError('Failed to fetch today waste data');
-        }
-      }
-    };
-
     fetchMonthlyWaste();
-    fetchTodayWaste();
-    const interval = setInterval(() => {
-      fetchMonthlyWaste();
-      fetchTodayWaste();
-    }, 2500);
+    const interval = setInterval(fetchMonthlyWaste, 2000);
 
     const connectWebSocket = () => {
       wsRef.current = new WebSocket('ws://localhost:5000/ws');
@@ -78,25 +56,22 @@ function Leftcard() {
         try {
           const data = JSON.parse(event.data);
           if (data.type === 'weight_update') {
+            // Show delta animation if weight increased
+            const prev = prevWeightRef.current;
+            if (data.weight > prev) {
+              const delta = data.weight - prev;
+              setWeightDelta(delta);
+              setShowDelta(true);
+              setTimeout(() => setShowDelta(false), 1500);
+            }
+            prevWeightRef.current = data.weight;
             setLiveWeight(data.weight);
-            
-            // Add new entry to recent entries (max 5)
-            const newEntry = {
-              id: Date.now(),
-              weight: data.weight,
-              timestamp: new Date().toLocaleTimeString()
-            };
-            
-            setRecentEntries(prev => {
-              const updated = [...prev, newEntry];
-              return updated.slice(-5); // Keep only last 5 entries
-            });
           }
         } catch {}
       };
       wsRef.current.onclose = () => {
         setIsConnected(false);
-        setTimeout(connectWebSocket, 5000);
+        setTimeout(connectWebSocket, 3000);
       };
       wsRef.current.onerror = () => setIsConnected(false);
     };
@@ -116,11 +91,11 @@ function Leftcard() {
     : `${weight.toLocaleString(undefined, { maximumFractionDigits: 0 })}g`;
 
   return (
-    <Card className="left-card">
-      <CardContent className="card-content">
-        <Box mb={1}>
+    <div className="left-card">
+      <div className="card-content">
+        <Box mb={0}>
           {error && (
-            <Alert severity="error" variant="filled">
+            <Alert severity="error" variant="filled" style={{ borderRadius: '8px' }}>
               {error}
             </Alert>
           )}
@@ -131,7 +106,7 @@ function Leftcard() {
             <div className="monthly-title">
               MONTHLY TOTAL
             </div>
-            <img src={waste} alt="Bin" style={{ width: "180px", height: "150px" }} />
+            <img src={waste} alt="Bin" style={{ width: "200px", height: "auto", marginBottom: '16px' }} />
             <div className="monthly-value">
               {formatWeight(monthlyWeight)}
             </div>
@@ -140,23 +115,7 @@ function Leftcard() {
             </div>
           </div>
 
-          <Divider orientation="vertical" flexItem className="divider" />
-
-          {/* Today Section */}
-          <div className="today-side">
-            <div className="today-title">
-              TODAY'S TOTAL
-            </div>
-            <img src={waste} alt="Bin" style={{ width: "180px", height: "150px" }} />
-            <div className="today-value">
-              {todayWeight.toLocaleString(undefined, { maximumFractionDigits: 2 })} kg
-            </div>
-            <div className="today-label">
-              Today's Waste
-            </div>
-          </div>
-
-          <Divider orientation="vertical" flexItem className="divider" />
+          <div className="divider" />
 
           {/* Live Section */}
           <div className="live-side" style={{ position: "relative" }}>
@@ -169,45 +128,26 @@ function Leftcard() {
             </div>
             <div className="odometer-row" style={{ position: "relative" }}>
               <Odometer
-                value={liveWeight/1000}
-                format="(,ddd).ddd"
+                value={liveWeight}
+                format="(,ddd)"
                 className="odometer"
               />
+              {showDelta && weightDelta > 0 && (
+                <span className="weight-delta">
+                  +{weightDelta.toFixed(2)}g
+                </span>
+              )}
             </div>
             <div className="live-unit">
-              kg
+              grams
             </div>
             <div className="live-label">
               REAL TIME WEIGHT
             </div>
           </div>
-          
-          {/* Recent Entries Section */}
-          <div className="recent-entries-side">
-            <div className="recent-title">
-              RECENT ENTRIES
-            </div>
-            <div className="entries-list">
-              {recentEntries.map((entry) => (
-                <div key={entry.id} className="entry-item">
-                  <div className="entry-weight">
-                    {(entry.weight ).toFixed(3)} g
-                  </div>
-                  <div className="entry-time">
-                    {entry.timestamp}
-                  </div>
-                </div>
-              ))}
-              {recentEntries.length === 0 && (
-                <div className="no-entries">
-                  No recent entries
-                </div>
-              )}
-            </div>
-          </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
