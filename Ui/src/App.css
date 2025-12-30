@@ -1,49 +1,74 @@
 /* Global Styles */
-@import url('https://fonts.googleapis.com/css?family=Montserrat:100,500,700&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Roboto:400&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
+
+:root {
+  --primary-color: #2563eb;
+  --secondary-color: #1e40af;
+  --background-color: #f8fafc;
+  --surface-color: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Drawer Animation - Smooth Spring Effect */
-@keyframes slideInSmooth {
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Drawer Animation */
+@keyframes slideInBounce {
   0% {
-    transform: translate3d(-100%, 0, 0);
+    transform: translateX(-100%);
     opacity: 0;
   }
 
   60% {
-    transform: translate3d(10px, 0, 0);
+    transform: translateX(20px);
     opacity: 1;
   }
 
   80% {
-    transform: translate3d(-5px, 0, 0);
+    transform: translateX(-10px);
   }
 
   100% {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
+    transform: translateX(0);
   }
 }
 
 .MuiDrawer-paper.animate-slide-in {
-  animation: slideInSmooth 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  will-change: transform, opacity;
+  animation: slideInBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .App {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #ffffff;
+  background-color: var(--background-color);
 }
 
-/* Fixed Header - Nokia Blue Gradient */
+/* Fixed Header */
 .header {
   position: fixed;
   top: 0;
@@ -57,47 +82,33 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 70px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .header * {
-  background: transparent !important;
-  color: white !important;
+  color: #ffffff !important;
 }
 
-/* Main Container - Optimized Transitions */
+/* Main Container */
 .main-container {
-  margin-top: 75px;
+  margin-top: 70px;
   display: flex;
-  background: #f4f7fb;
-  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: margin-left;
+  background: var(--background-color);
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: calc(100vh - 70px);
 }
 
 .main-container.drawer-open {
   margin-left: 280px;
-  /* Same width as the drawer */
 }
 
-/* Main Content - Optimized Performance */
+/* Main Content */
 .main {
   flex: 1;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  min-height: calc(100vh - 96px);
-  transform: translateZ(0);
-  /* Force hardware acceleration */
-}
-
-/* Normal view styles (non-user-manual) */
-.main:not(.user-manual-view) {
-  background: #f4f7fb;
-  margin: 2px;
-  border-radius: 12px;
-  padding: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  gap: 24px;
+  width: 100%;
 }
 
 .main-top-row {
@@ -124,133 +135,57 @@
 .analytics-view {
   width: 100%;
   height: 100%;
-  /* Full height */
-  padding: 3px;
-  display: flex;
-  flex-direction: column;
 }
 
 .analytics-charts {
   display: flex;
-  flex-direction: row;
-  gap: 6px;
-  /* gap between charts */
-  width: 100%;
-  height: 100%;
-  flex: 1;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .chart-container {
-  background: white;
-  padding: 14px;
-  /* Reduced from 24px */
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: var(--surface-color);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
   border: 1px solid #e2e8f0;
-  flex: 1;
-  width: 50%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .chart-container:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 64, 128, 0.12);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .chart-container h3 {
-  color: #102e63;
+  color: var(--text-primary);
   font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 16px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-
-
 /* Responsive Design */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .main-top-row {
     flex-direction: column;
+    height: auto;
   }
 
   .live_data,
   .people {
     width: 100%;
-  }
-
-  .analytics-charts {
-    flex-direction: column;
-    padding: 12px;
-  }
-
-  .chart-container {
-    width: 100%;
-    padding: 16px;
-  }
-
-  .user-manual-container {
-    padding: 0;
-  }
-
-  .main.user-manual-view {
-    margin: 0;
-    padding: 0;
+    flex: none;
   }
 }
 
-/* Drawer Overrides - Performance Optimized */
+/* Drawer Overrides */
 .MuiDrawer-root {
   z-index: 1100 !important;
-  background: transparent !important;
-}
-
-.MuiDrawer-paper {
-  transform: translateZ(0);
-  /* Force hardware acceleration */
-  backface-visibility: hidden;
-  /* Prevent flickering */
 }
 
 .MuiBackdrop-root {
-  background-color: rgba(0, 0, 0, 0.1) !important;
-  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-/* User Manual Integration Styles */
-.user-manual-container {
-  width: 100%;
-  height: calc(100vh - 80px);
-  overflow-y: auto;
-  background: #f4f7fb;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
-
-/* Ensure User Manual doesn't inherit conflicting styles */
-.user-manual-container .user-manual {
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
-  background: transparent;
-  padding: 0;
-  margin: 0;
-}
-
-/* Override any conflicting typography in User Manual */
-.user-manual * {
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
-}
-
-/* Ensure proper spacing for User Manual when header is present */
-.main.user-manual-view {
-  margin-top: 0;
-  padding: 0;
-  background: transparent;
-  box-shadow: none;
-  border-radius: 0;
-  height: calc(100vh - 80px);
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(2px);
 }

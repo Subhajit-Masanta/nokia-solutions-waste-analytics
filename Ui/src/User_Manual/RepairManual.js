@@ -8,32 +8,44 @@ const repairSections = {
       <div>
         <h4>Introduction to System Maintenance</h4>
         <p>
-          The Waste Management System is designed with comprehensive diagnostic and maintenance capabilities to ensure optimal 
-          performance throughout its operational lifecycle. This repair manual provides detailed guidance for troubleshooting, 
+          The Waste Management System is designed with comprehensive diagnostic and maintenance capabilities to ensure optimal
+          performance throughout its operational lifecycle. This repair manual provides detailed guidance for troubleshooting,
           calibration, and system configuration procedures.
         </p>
         <p>
-          The system features an integrated diagnostic interface accessible through the web dashboard, providing real-time 
-          monitoring of hardware components, software processes, and network connectivity. Regular maintenance procedures 
+          The system features an integrated diagnostic interface accessible through the web dashboard, providing real-time
+          monitoring of hardware components, software processes, and network connectivity. Regular maintenance procedures
           help maintain measurement accuracy and prevent system downtime.
         </p>
         <p>
-          Maintenance activities range from simple calibration adjustments to advanced system configuration changes. The 
+          Maintenance activities range from simple calibration adjustments to advanced system configuration changes. The
           modular design allows for component-specific troubleshooting without affecting overall system operation.
         </p>
 
         <h4>Diagnostic Panel Architecture</h4>
+        <p>
+          All troubleshooting panels feature a modern, clean interface with visual feedback for better user experience.
+          Each section includes subtle icons, toast notifications for actions, and loading indicators for async operations.
+        </p>
         <ul>
-          <li><strong>General Diagnostics:</strong> System-wide status monitoring, manual controls, and live performance metrics</li>
-          <li><strong>HX711 Settings:</strong> ADC amplifier configuration, gain adjustment, and signal processing parameters</li>
-          <li><strong>Load Cell Panel:</strong> Sensor calibration, precision tuning, and accuracy validation tools</li>
-          <li><strong>RPi Settings:</strong> Raspberry Pi system configuration, network settings, and hardware interfaces</li>
+          <li><strong>General Diagnostics:</strong> System-wide status monitoring with real-time metrics, icon-enhanced rows, and instant feedback via toast notifications</li>
+          <li><strong>HX711 Settings:</strong> ADC amplifier configuration with icon-labeled sections, auto-tare controls, and visual loading states</li>
+          <li><strong>Load Cell Panel:</strong> Sensor calibration tools with progress indicators and success confirmation messages</li>
+          <li><strong>RPi Settings:</strong> Raspberry Pi system configuration with network controls and interactive feedback</li>
+        </ul>
+
+        <h4>UI Enhancements</h4>
+        <ul>
+          <li><strong>Visual Icons:</strong> Each metric displays a color-coded icon (Scale, Thermometer, Network, RAM) for quick identification</li>
+          <li><strong>Toast Notifications:</strong> Success and error messages appear as temporary pop-ups at the bottom of the screen</li>
+          <li><strong>Loading States:</strong> Buttons show spinners during processing (e.g., "Tare Now" becomes "Calibrating...")</li>
+          <li><strong>Responsive Rows:</strong> Clean, border-outlined rows with subtle hover effects and disabled state styling</li>
         </ul>
 
         <h4>Access Control and Security</h4>
         <p>
-          Most repair and configuration functions require administrator authentication to prevent unauthorized system changes. 
-          Public access functions include basic monitoring and manual tare operations, while advanced settings require 
+          Most repair and configuration functions require administrator authentication to prevent unauthorized system changes.
+          Public access functions include basic monitoring and manual tare operations, while advanced settings require
           proper credentials for system security.
         </p>
       </div>
@@ -44,12 +56,15 @@ const repairSections = {
     content: (
       <div>
         <h4>Available Functions</h4>
-        
+
         <h5>🎯 Manual Tare (Public Access)</h5>
         <ul>
           <li><strong>Purpose:</strong> Reset baseline weight to zero manually</li>
           <li><strong>When to Use:</strong> After moving the device or when readings drift</li>
           <li><strong>Action:</strong> Click "TARE NOW" button - no authentication required</li>
+          <li><strong>Visual Feedback:</strong> Button shows loading spinner during operation (1.5 seconds)</li>
+          <li><strong>Success Message:</strong> Green toast notification confirms "Tare completed successfully"</li>
+          <li><strong>Icon:</strong> Blue scale icon appears next to the Tare section label</li>
         </ul>
 
         <h5>🌐 Network Configuration (Admin Only)</h5>
@@ -140,6 +155,9 @@ const repairSections = {
         <ul>
           <li><strong>Function:</strong> Send updated configuration to backend</li>
           <li><strong>Required:</strong> Must click after making changes</li>
+          <li><strong>Visual Feedback:</strong> Green success button with loading spinner during application</li>
+          <li><strong>Confirmation:</strong> Toast notification appears: "Settings applied successfully"</li>
+          <li><strong>Icon:</strong> Green checkmark icon indicates successful application</li>
           <li><strong>Verification:</strong> Monitor readings to confirm changes took effect</li>
         </ul>
       </div>

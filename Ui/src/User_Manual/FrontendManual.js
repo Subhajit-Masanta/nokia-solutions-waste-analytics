@@ -18,7 +18,7 @@ const frontendSections = {
         <ul>
           <li><strong>Real-time Dashboard:</strong> Live weight monitoring with WebSocket updates, Alert system with configurable thresholds and notifications.</li>
           <li><strong>Hardware Diagnostics:</strong> HX711, Load Cell, and RPi status monitoring, RPi system health (CPU, memory, thermal status).</li>
-          <li><strong>Analytics:</strong> Weekly/Monthly trends, waste reduction calculations, anomaly detection, usage patterns, and drift analysis</li>
+          <li><strong>Analytics:</strong> Tab-based interface with "Charts Overview" and "Meal Distribution" views, Weekly/Monthly trends with interactive line charts, Pie chart for waste category breakdown, Responsive containers adapting to screen size, Real-time data updates with smooth transitions</li>
           <li><strong>Modular Manual System:</strong> 4 separate manual components with shared layout, shared UI library and validation logic.</li>
         </ul>
       </div>
@@ -63,7 +63,7 @@ const frontendSections = {
     content: (
       <div>
         <h4>Dashboard Components</h4>
-        
+
         <h5>LeftCard - Real-time Display</h5>
         <ul>
           <li>Live weight display with WebSocket updates</li>
@@ -86,18 +86,40 @@ const frontendSections = {
         </ul>
 
         <h4>Charts Component</h4>
+        <p>
+          The Analytics section features a modern tab-based interface for comprehensive data visualization and analysis.
+        </p>
         <ul>
-          <li><strong>Chart.js Integration:</strong> Line/bar charts with custom configurations</li>
-          <li><strong>Real-time Updates:</strong> Live data binding with animation</li>
-          <li><strong>Multiple Chart Types:</strong> Weekly trends, monthly comparisons</li>
+          <li><strong>Tab Navigation:</strong> "Charts Overview" and "Meal Distribution" tabs for different visualization modes</li>
+          <li><strong>Charts Overview Tab:</strong> Weekly (7-day) and Monthly (4-week) trend line charts with Material-UI integration</li>
+          <li><strong>Meal Distribution Tab:</strong> Pie/Donut chart showing waste breakdown by meal type (Breakfast, Lunch, Dinner, Snacks, Supper)</li>
+          <li><strong>Responsive Design:</strong> Charts automatically resize for mobile, tablet, and desktop screens</li>
+          <li><strong>Real-time Updates:</strong> Live data binding with smooth animations and transitions</li>
+          <li><strong>Interactive Elements:</strong> Tooltips on hover, legend toggles, and data point highlighting</li>
+        </ul>
+
+        <h4>Layout Improvements</h4>
+        <ul>
+          <li><strong>Full-Width Display:</strong> Content now spans the entire screen width (removed 1600px max-width constraint)</li>
+          <li><strong>Adaptive Padding:</strong> Responsive spacing adjusts based on screen size using Material-UI sx props</li>
+          <li><strong>Compact Design:</strong> Streamlined layout matches deployed version's efficient use of space</li>
         </ul>
 
         <h4>Troubleshooting Panels</h4>
+        <p>All troubleshooting panels feature a unified, modern design with consistent interactions and visual feedback.</p>
         <ul>
-          <li><strong>HX711Panel:</strong> ADC calibration, signal quality monitoring</li>
-          <li><strong>LoadCellPanel:</strong> Sensor diagnostics, drift detection</li>
-          <li><strong>RPiPanel:</strong> GPIO status, system resources, temperature</li>
-          <li><strong>GeneralStatusPanel:</strong> Overall system health dashboard</li>
+          <li><strong>HX711Panel:</strong> ADC calibration with icon-labeled rows, loading states on "Clean" button, success toast notifications</li>
+          <li><strong>LoadCellPanel:</strong> Sensor diagnostics with calibrate button showing progress, toast confirms "Calibration completed"</li>
+          <li><strong>RPiPanel:</strong> Network settings (WiFi SSID/Password), System restart with loading indicator, Storage configuration</li>
+          <li><strong>GeneralStatusPanel:</strong> Icon-enhanced metrics (Scale, Temp, Network, RAM), Real-time weight display, Admin unlock feature with authentication dialog</li>
+        </ul>
+
+        <h4>UI/UX Enhancements</h4>
+        <ul>
+          <li><strong>Visual Icons:</strong> Material-UI icons for each section (Scale, Thermostat, Public, Memory, Settings)</li>
+          <li><strong>Toast Notifications:</strong> Bottom-center pop-ups for success/error feedback with auto-dismiss after 3 seconds</li>
+          <li><strong>Loading States:</strong> Circular progress spinners replace button text during async operations</li>
+          <li><strong>Clean Layout:</strong> Row-based design with subtle borders, hover effects, and disabled state opacity</li>
         </ul>
 
         <h4>Manual System</h4>

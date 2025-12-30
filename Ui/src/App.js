@@ -17,32 +17,16 @@ function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentView, setCurrentView] = useState('dashboard');
 
-  // Smooth page transition variants
   const pageVariants = {
-    initial: {
-      opacity: 0,
-      y: 15,
-      scale: 0.99
-    },
-    in: {
-      opacity: 1,
-      y: 0,
-      scale: 1
-    },
-    out: {
-      opacity: 0,
-      y: -10,
-      scale: 0.99
-    }
+    initial: { opacity: 0, y: 20 },
+    in: { opacity: 1, y: 0 },
+    out: { opacity: 0, y: -20 }
   };
 
-  // Ultra smooth transition settings
   const pageTransition = {
-    type: "spring",
-    stiffness: 60,
-    damping: 15,
-    mass: 0.8,
-    duration: 0.6
+    type: "tween",
+    ease: "anticipate",
+    duration: 0.5
   };
 
   const renderMainContent = () => {
@@ -100,18 +84,10 @@ function App() {
       </div>
 
       <div className={`main-container ${drawerOpen ? 'drawer-open' : ''}`}>
-        <div className={`main ${currentView === 'manual' ? 'user-manual-view' : ''}`}>
-          {currentView === 'manual' ? (
-            <div className="user-manual-container">
-              <AnimatePresence mode="wait">
-                {renderMainContent()}
-              </AnimatePresence>
-            </div>
-          ) : (
-            <AnimatePresence mode="wait">
-              {renderMainContent()}
-            </AnimatePresence>
-          )}
+        <div className="main">
+          <AnimatePresence mode="wait">
+            {renderMainContent()}
+          </AnimatePresence>
         </div>
       </div>
 

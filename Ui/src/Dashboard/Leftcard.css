@@ -5,6 +5,7 @@
   border: 1px solid #e2e8f0 !important;
   height: 100%;
   width: 100%;
+  max-width: 100%;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
   overflow: hidden;
   display: flex;
@@ -22,6 +23,7 @@
 .card-content {
   padding: 24px !important;
   height: 100%;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -32,9 +34,12 @@
   align-items: center;
   height: 100%;
   gap: 24px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-.monthly-side, .live-side {
+.monthly-side,
+.live-side {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -94,8 +99,15 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: .5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: .5;
+  }
 }
 
 .live-text {
@@ -172,9 +184,20 @@
 }
 
 @keyframes float-up {
-  0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
-  20% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+
+  20% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
 }
 
 @media (max-width: 900px) {
@@ -183,9 +206,92 @@
     grid-template-rows: auto 1px auto;
     gap: 32px;
   }
+
   .divider {
     width: 80%;
     height: 1px;
     margin: 0 auto;
+  }
+}
+
+/* Enhanced mobile responsiveness */
+@media screen and (max-width: 768px) {
+  .card-content {
+    padding: 16px !important;
+  }
+
+  .leftcard-grid {
+    gap: 20px;
+  }
+
+  .monthly-title,
+  .live-title,
+  .today-title {
+    font-size: 0.85rem;
+  }
+
+  .monthly-value,
+  .live-value,
+  .today-value {
+    font-size: 2rem;
+  }
+
+  .monthly-subtitle,
+  .live-subtitle,
+  .today-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .live-indicator {
+    gap: 6px;
+  }
+
+  .live-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .live-text {
+    font-size: 1rem;
+  }
+
+  .recent-entries {
+    max-height: 200px;
+  }
+
+  .entry-item {
+    padding: 10px;
+  }
+
+  .entry-weight {
+    font-size: 1rem;
+  }
+
+  .entry-type {
+    font-size: 0.75rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .card-content {
+    padding: 12px !important;
+  }
+
+  .leftcard-grid {
+    gap: 16px;
+  }
+
+  .monthly-value,
+  .live-value,
+  .today-value {
+    font-size: 1.75rem;
+  }
+
+  .live-indicator {
+    padding: 8px 16px;
+  }
+
+  .entry-item {
+    padding: 8px;
   }
 }

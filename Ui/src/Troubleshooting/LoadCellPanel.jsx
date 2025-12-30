@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-  MenuItem,
-  Box,
-  Typography
+  Dialog, DialogTitle, DialogContent, DialogActions,
+  Button, TextField, Snackbar, Alert, CircularProgress
 } from '@mui/material';
+import {
+  Scale, Straighten, Functions, LockOpen, CheckCircle
+} from '@mui/icons-material';
 
 export default function LoadCellPanel() {
   const [auth, setAuth] = useState(false);
@@ -17,188 +13,219 @@ export default function LoadCellPanel() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [calibrationFactor, setCalibrationFactor] = useState('2280');
+  const [offset, setOffset] = useState('8388608');
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
 
   const handleLogin = () => {
     if (username === 'kaka' && password === 'nokia') {
       setAuth(true);
       setLoginOpen(false);
       setError('');
+      showToast('Authentication successful', 'success');
     } else {
       setError('Invalid credentials');
+      showToast('Authentication failed', 'error');
     }
   };
 
+  const showToast = (message, severity = 'success') => {
+    setToast({ open: true, message, severity });
+  };
+
+  const handleCalibrate = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      showToast('Calibration completed successfully');
+    }, 2000);
+  };
+
+  const handleApply = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      showToast('Settings applied successfully');
+    }, 1500);
+  };
+
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h5" sx={{ color: '#102e63', mb: 1 }}>
-        Load Cell Settings
-      </Typography>
-      <Typography variant="body1" sx={{ color: '#64748b', mb: 3 }}>
-        Configure calibration, tolerance, and behavior of load cells.
-      </Typography>
+    <div style={{ padding: '20px' }}>
+      <h2 style={styles.title}>Load Cell Settings</h2>
+      <p style={styles.description}>Configure load cell calibration factors and offset values.</p>
 
       {!auth && (
         <Button
-          variant="contained"
+          variant="outlined"
+          color="primary"
+          startIcon={<LockOpen />}
           onClick={() => setLoginOpen(true)}
-          sx={{ mb: 3 }}
+          style={{ marginBottom: '20px' }}
         >
-          🔓 Unlock Settings
+          Unlock Settings
         </Button>
       )}
 
       {/* Calibration Factor */}
-      <SettingBlock
-        title="Calibration Factor"
-        desc="Set scaling factor to convert ADC to grams."
-        control={
-          <TextField
-            size="small"
-            value="2280.3"
-            disabled={!auth}
-            sx={{ width: '150px' }}
-          />
-        }
-        enabled={auth}
-      />
+      <div style={styles.row(auth)}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Functions style={{ color: '#2563eb', fontSize: 20 }} />
+          <div>
+            <h4 style={styles.label}>Calibration Factor</h4>
+            <p style={styles.desc}>Weight multiplier from ADC raw to grams.</p>
+          </div>
+        </div>
+        <TextField
+          size="small"
+          value={calibrationFactor}
+          disabled={!auth}
+          onChange={(e) => setCalibrationFactor(e.target.value)}
+          style={{ width: '140px' }}
+        />
+      </div>
 
-      {/* Reference Weight */}
-      <SettingBlock
-        title="Reference Weight"
-        desc="Known mass used during calibration."
-        control={
-          <TextField
-            size="small"
-            value="1000"
-            disabled={!auth}
-            sx={{ width: '150px' }}
-            InputProps={{
-              endAdornment: <span style={{ marginLeft: '4px' }}>g</span>
-            }}
-          />
-        }
-        enabled={auth}
-      />
+      {/* Offset Value */}
+      <div style={styles.row(auth)}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Straighten style={{ color: '#64748b', fontSize: 20 }} />
+          <div>
+            <h4 style={styles.label}>Offset Value</h4>
+            <p style={styles.desc}>ADC reading when no load is applied.</p>
+          </div>
+        </div>
+        <TextField
+          size="small"
+          value={offset}
+          disabled={!auth}
+          onChange={(e) => setOffset(e.target.value)}
+          style={{ width: '140px' }}
+        />
+      </div>
 
-      {/* Sampling Speed */}
-      <SettingBlock
-        title="Sampling Speed"
-        desc="Number of readings averaged per cycle."
-        control={
-          <TextField
-            select
-            size="small"
-            value="10"
-            disabled={!auth}
-            sx={{ width: '120px' }}
-          >
-            {[1, 5, 10, 20, 50].map(opt => (
-              <MenuItem key={opt} value={opt}>{opt}</MenuItem>
-            ))}
-          </TextField>
-        }
-        enabled={auth}
-      />
+      {/* Max Capacity */}
+      <div style={styles.row(auth)}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Scale style={{ color: '#64748b', fontSize: 20 }} />
+          <div>
+            <h4 style={styles.label}>Max Capacity</h4>
+            <p style={styles.desc}>Maximum weight the load cell can measure.</p>
+          </div>
+        </div>
+        <TextField
+          size="small"
+          value="50"
+          disabled={!auth}
+          style={{ width: '120px' }}
+          InputProps={{ endAdornment: <span style={{ marginLeft: '4px', fontSize: '0.9rem' }}>kg</span> }}
+        />
+      </div>
 
-      {/* Error Tolerance */}
-      <SettingBlock
-        title="Error Tolerance"
-        desc="Max allowed deviation in %."
-        control={
-          <TextField
-            size="small"
-            value="5"
-            disabled={!auth}
-            sx={{ width: '80px' }}
-            InputProps={{
-              endAdornment: <span style={{ marginLeft: '4px' }}>%</span>
-            }}
-          />
-        }
-        enabled={auth}
-      />
+      {/* Calibrate */}
+      <div style={styles.row(auth)}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Scale style={{ color: '#f59e0b', fontSize: 20 }} />
+          <div>
+            <h4 style={styles.label}>Run Calibration</h4>
+            <p style={styles.desc}>Perform automatic calibration with known weight.</p>
+          </div>
+        </div>
+        <Button
+          variant="outlined"
+          color="warning"
+          disabled={!auth || loading}
+          onClick={handleCalibrate}
+          style={{ minWidth: '140px' }}
+        >
+          {loading ? <CircularProgress size={20} /> : 'Calibrate'}
+        </Button>
+      </div>
 
-      {/* Reset Calibration */}
-      <SettingBlock
-        title="Reset Calibration"
-        desc="Wipe and revert all calibration data."
-        control={
-          <Button variant="outlined" color="error" disabled={!auth}>
-            Reset
-          </Button>
-        }
-        enabled={auth}
-      />
-
-      {/* Apply Configuration */}
-      <SettingBlock
-        title="Apply Configuration"
-        desc="Send updated load cell parameters to backend."
-        control={
-          <Button variant="contained" color="success" disabled={!auth}>
-            Apply
-          </Button>
-        }
-        enabled={auth}
-      />
+      {/* Apply Settings */}
+      <div style={styles.row(auth)}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <CheckCircle style={{ color: '#16a34a', fontSize: 20 }} />
+          <div>
+            <h4 style={styles.label}>Apply Settings</h4>
+            <p style={styles.desc}>Save and apply load cell configuration.</p>
+          </div>
+        </div>
+        <Button
+          variant="contained"
+          color="success"
+          disabled={!auth || loading}
+          onClick={handleApply}
+          style={{ minWidth: '120px' }}
+        >
+          {loading ? <CircularProgress size={20} color="inherit" /> : 'Apply'}
+        </Button>
+      </div>
 
       {/* Auth Dialog */}
       <Dialog open={loginOpen} onClose={() => setLoginOpen(false)}>
-        <DialogTitle>Admin Login</DialogTitle>
+        <DialogTitle>Authenticate</DialogTitle>
         <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Username"
-            fullWidth
-            variant="outlined"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <TextField
-            margin="dense"
-            label="Password"
-            type="password"
-            fullWidth
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {error && <Typography color="error" variant="body2">{error}</Typography>}
+          <TextField autoFocus label="Username" fullWidth value={username} onChange={(e) => setUsername(e.target.value)} style={{ marginTop: '10px' }} />
+          <TextField type="password" label="Password" fullWidth value={password} onChange={(e) => setPassword(e.target.value)} style={{ marginTop: '10px' }} />
+          {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
         </DialogContent>
         <DialogActions>
+          <Button onClick={() => setLoginOpen(false)}>Cancel</Button>
           <Button onClick={handleLogin} variant="contained">Login</Button>
         </DialogActions>
       </Dialog>
-    </Box>
+
+      {/* Toast Notification */}
+      <Snackbar
+        open={toast.open}
+        autoHideDuration={3000}
+        onClose={() => setToast({ ...toast, open: false })}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setToast({ ...toast, open: false })} severity={toast.severity}>
+          {toast.message}
+        </Alert>
+      </Snackbar>
+    </div>
   );
 }
 
-// === Shared Setting Block Component ===
-function SettingBlock({ title, desc, control, enabled }) {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: '#f1f5f9',
-        borderRadius: '10px',
-        p: 2,
-        mt: 2,
-        opacity: enabled ? 1 : 0.4,
-        pointerEvents: enabled ? 'auto' : 'none'
-      }}
-    >
-      <Box>
-        <Typography variant="subtitle1" sx={{ color: '#0f172a' }}>
-          {title}
-        </Typography>
-        <Typography variant="body2" sx={{ color: '#64748b' }}>
-          {desc}
-        </Typography>
-      </Box>
-      {control}
-    </Box>
-  );
-}
+const styles = {
+  title: {
+    fontSize: '1.6rem',
+    fontWeight: 'bold',
+    color: '#102e63',
+    marginBottom: '8px'
+  },
+  description: {
+    fontSize: '1rem',
+    color: '#475569',
+    marginBottom: '24px'
+  },
+  row: (enabled) => ({
+    marginTop: '20px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#f8fafc',
+    padding: '18px',
+    borderRadius: '12px',
+    opacity: enabled ? 1 : 0.5,
+    pointerEvents: enabled ? 'auto' : 'none',
+    minHeight: '90px',
+    border: '1px solid #e2e8f0',
+    transition: 'all 0.2s ease'
+  }),
+  label: {
+    margin: 0,
+    fontSize: '1.05rem',
+    color: '#0f172a',
+    fontWeight: 600
+  },
+  desc: {
+    margin: 0,
+    fontSize: '0.9rem',
+    color: '#64748b',
+    marginTop: '2px'
+  }
+};

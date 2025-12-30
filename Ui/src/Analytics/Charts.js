@@ -512,7 +512,7 @@ export default function Charts() {
 
       {/* Tab Content */}
       {activeTab === 0 && (
-        <Box sx={{ display: 'flex', gap: 2, minHeight: '700px' }}>
+        <Box sx={{ display: 'flex', gap: 2, minHeight: '700px', flexDirection: { xs: 'column', md: 'row' } }}>
           {/* LEFT - Weekly Overview (Bar Chart) */}
           <Box sx={{ flex: 1 }}>
             <Card elevation={3} sx={{
@@ -576,7 +576,7 @@ export default function Charts() {
       {activeTab === 1 && (
         <Box sx={{ minHeight: '700px' }}>
           {/* Statistics Cards Row */}
-          <Box sx={{ display: 'flex', gap: 2, marginBottom: 3 }}>
+          <Box sx={{ display: 'flex', gap: 2, marginBottom: 3, flexDirection: { xs: 'column', md: 'row' } }}>
             {/* Total Waste Card */}
             <Card elevation={2} sx={{ flex: 1, borderRadius: '12px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
               <CardContent sx={{ padding: '20px !important', color: '#fff' }}>
@@ -609,7 +609,7 @@ export default function Charts() {
           </Box>
 
           {/* Main Content Row */}
-          <Box sx={{ display: 'flex', gap: 2 }}>
+          <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', md: 'row' } }}>
             {/* Donut Chart */}
             <Card elevation={3} sx={{
               flex: 1.5,
@@ -706,4 +706,5 @@ export default function Charts() {
     </Box>
   );
 }
+
 

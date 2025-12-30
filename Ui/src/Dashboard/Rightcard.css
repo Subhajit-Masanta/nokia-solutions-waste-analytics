@@ -1,15 +1,13 @@
 .rightcard-custom {
-  background: linear-gradient(
-    135deg,
-    rgba(18, 65, 145, 0.06) 0%,
-    rgba(18, 65, 145, 0.10) 50%,
-    rgba(18, 65, 145, 0.14) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(18, 65, 145, 0.06) 0%,
+      rgba(18, 65, 145, 0.10) 50%,
+      rgba(18, 65, 145, 0.14) 100%);
   backdrop-filter: blur(8px);
   color: #0f172a;
   border-radius: 24px;
   border: 1px solid rgba(18, 65, 145, 0.25);
-  box-shadow: 
+  box-shadow:
     0 20px 60px rgba(18, 65, 145, 0.12),
     0 8px 25px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
@@ -43,20 +41,25 @@
 
 .impact-gif {
   /* CIRCLE SIZE - Change these values to adjust size */
-  width: 210px;              /* Adjust width (increase/decrease for larger/smaller circle) */
-  height: 210px;             /* Adjust height (keep same as width for perfect circle) */
-  
+  width: 210px;
+  /* Adjust width (increase/decrease for larger/smaller circle) */
+  height: 210px;
+  /* Adjust height (keep same as width for perfect circle) */
+
   /* CIRCLE SHAPE - Change border-radius to adjust roundness */
-  border-radius: 50%;        /* 50% = perfect circle, lower % = more rectangular */
-  
+  border-radius: 50%;
+  /* 50% = perfect circle, lower % = more rectangular */
+
   /* IMAGE FITTING */
-  object-fit: cover;         /* 'cover' fills circle, 'contain' shows full image */
-  
+  object-fit: cover;
+  /* 'cover' fills circle, 'contain' shows full image */
+
   /* VISUAL EFFECTS */
-  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s, box-shadow 0.3s ease, filter 0.3s ease;
-  border: 3px solid #cbd5e1; /* Border thickness - adjust px value */
-  
+  border: 3px solid #cbd5e1;
+  /* Border thickness - adjust px value */
+
   /* Center the image */
   object-position: center;
 }
@@ -93,7 +96,7 @@
   letter-spacing: 0.5px;
   color: #0f172a;
   text-align: center;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .fed-row {
@@ -119,7 +122,7 @@
   font-size: 1.5rem;
   color: #334155;
   letter-spacing: 0.5px;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .people-count {
@@ -201,9 +204,85 @@
 }
 */
 
-/* Square with rounded corners */
-/*
-.impact-gif {
-  border-radius: 15px;
+/* ===== MOBILE RESPONSIVE STYLES ===== */
+@media screen and (max-width: 768px) {
+  .rightcard-custom {
+    height: auto;
+    min-height: 350px;
+    padding: 0.75rem;
+  }
+
+  .impact-gif {
+    width: 150px;
+    height: 150px;
+  }
+
+  .fed-title {
+    font-size: 1.4rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .fed-row {
+    gap: 1.5rem;
+  }
+
+  .fed-col {
+    min-width: 90px;
+  }
+
+  .fed-label {
+    font-size: 1.1rem;
+  }
+
+  .people-count {
+    font-size: 2rem !important;
+  }
+
+  .impact-text,
+  .calculation-info {
+    font-size: 0.85rem !important;
+  }
 }
-*/
+
+@media screen and (max-width: 480px) {
+  .rightcard-custom {
+    min-height: 300px;
+    padding: 0.5rem;
+  }
+
+  .impact-gif {
+    width: 120px;
+    height: 120px;
+  }
+
+  .fed-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .fed-row {
+    gap: 1rem;
+    flex-direction: column;
+  }
+
+  .fed-col {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .fed-label {
+    font-size: 1rem;
+  }
+
+  .people-count {
+    font-size: 1.75rem !important;
+  }
+
+  .impact-text {
+    font-size: 0.8rem !important;
+  }
+
+  .calculation-info {
+    font-size: 0.75rem !important;
+  }
+}

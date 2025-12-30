@@ -5,12 +5,23 @@ import appLogo from '../utils/nokialogo.png';
 
 const AppBarComponent = ({ onMenuClick }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
     const timerId = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
-    return () => clearInterval(timerId);
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      clearInterval(timerId);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const formattedTime = currentTime.toLocaleTimeString([], {
@@ -19,24 +30,9 @@ const AppBarComponent = ({ onMenuClick }) => {
     second: '2-digit',
   });
 
-  // const headerStyle = {
-  //   position: 'sticky',
-  //   top: 0,
-  //   zIndex: 1000,
-  //   display: 'flex',
-  //   alignItems: 'center',
-  //   justifyContent: 'space-between',
-  //   padding: '12px 24px',
-  //   background: 'linear-gradient(135deg, #102e63 0%, #001f47 100%)',
-  //   color: 'white',
-  //   boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
-  //   backdropFilter: 'blur(8px)',
-  //   borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-  // };
-
   const logo = {
-    height: '44px',
-    width: '120px',
+    height: isMobile ? '36px' : '44px',
+    width: isMobile ? '90px' : '120px',
     objectFit: 'contain',
     display: 'flex',
     alignItems: 'center',
@@ -45,35 +41,42 @@ const AppBarComponent = ({ onMenuClick }) => {
   const logoContainer = {
     display: 'flex',
     alignItems: 'center',
-    gap: '12px',
+    gap: isMobile ? '8px' : '12px',
+    flexShrink: 0
   };
 
   const menuButton = {
     color: 'white',
-    padding: '8px',
+    padding: isMobile ? '6px' : '8px',
   };
 
   const title = {
-    fontSize: '35px',
+    fontSize: isMobile ? (window.innerWidth < 480 ? '14px' : '16px') : '35px',
     fontWeight: 600,
     flexGrow: 1,
     textAlign: 'center',
     color: ' #ffffffcc',
-    letterSpacing: '1px',
+    letterSpacing: isMobile ? '0.5px' : '1px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    maxWidth: isMobile ? 'calc(100vw - 200px)' : 'none',
+    padding: isMobile ? '0 8px' : '0'
   };
 
   const time = {
-    fontSize: '20px',
+    fontSize: isMobile ? '12px' : '20px',
     fontWeight: 500,
     color: ' #ffffffcc',
     whiteSpace: 'nowrap',
-    padding: '8px 15px',
+    padding: isMobile ? '4px 8px' : '8px 15px',
+    flexShrink: 0
   };
 
   return (
     <>
       <div style={logoContainer}>
-        <IconButton 
+        <IconButton
           onClick={onMenuClick}
           style={menuButton}
           aria-label="menu"
@@ -82,7 +85,7 @@ const AppBarComponent = ({ onMenuClick }) => {
         </IconButton>
         <img src={appLogo} alt="App Logo" style={logo} />
       </div>
-      
+
       <div style={title}>Waste Management Dashboard</div>
       <div style={time}> {formattedTime}</div>
     </>
@@ -90,3 +93,4 @@ const AppBarComponent = ({ onMenuClick }) => {
 };
 
 export default AppBarComponent;
+
