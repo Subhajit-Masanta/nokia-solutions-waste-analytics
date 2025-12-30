@@ -50,7 +50,8 @@ function Leftcard() {
     const interval = setInterval(fetchMonthlyWaste, 2000);
 
     const connectWebSocket = () => {
-      wsRef.current = new WebSocket('ws://localhost:5000/ws');
+      const wsUrl = process.env.REACT_APP_WS_URL || 'ws://localhost:5000/ws';
+      wsRef.current = new WebSocket(wsUrl);
       wsRef.current.onopen = () => setIsConnected(true);
       wsRef.current.onmessage = (event) => {
         try {
@@ -67,7 +68,7 @@ function Leftcard() {
             prevWeightRef.current = data.weight;
             setLiveWeight(data.weight);
           }
-        } catch {}
+        } catch { }
       };
       wsRef.current.onclose = () => {
         setIsConnected(false);
@@ -76,7 +77,7 @@ function Leftcard() {
       wsRef.current.onerror = () => setIsConnected(false);
     };
 
-    
+
     connectWebSocket();
 
     return () => {
